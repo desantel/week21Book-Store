@@ -2,7 +2,8 @@
 import React, { useState } from 'react';
 import { Form, Button, Alert } from 'react-bootstrap';
 
-import { loginUser } from '../utils/API';
+import { useMutation } from '@apollo/client';
+import { LOGIN_USER } from '../utils/mutations';
 import Auth from '../utils/auth';
 
 const LoginForm = () => {
@@ -15,6 +16,8 @@ const LoginForm = () => {
     setUserFormData({ ...userFormData, [name]: value });
   };
 
+  const [login, { error }] = useMutation(LOGIN_USER)
+
   const handleFormSubmit = async (event) => {
     event.preventDefault();
 
@@ -26,16 +29,9 @@ const LoginForm = () => {
     }
 
     try {
-      const response = await loginUser(userFormData);
-
-      if (!response.ok) {
-        throw new Error('something went wrong!');
-      }
-
-      const { token, user } = await response.json();
-      console.log(user);
-      Auth.login(token);
-    } catch (err) {
+      const { data } = await login({ variables: { ...userFormData } });
+      Auth.login(data.login.token)
+      } catch (err) {
       console.error(err);
       setShowAlert(true);
     }
