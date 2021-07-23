@@ -1,5 +1,7 @@
+import React from 'react';
 import { Jumbotron, Container, CardColumns, Card, Button } from 'react-bootstrap';
-import { useMutation, useQuery } from '@apollo/client';
+import { useMutation } from '@apollo/client';
+import { useQuery } from '@apollo/client';
 import Auth from '../utils/auth';
 import { removeBookId } from '../utils/localStorage';
 import { GET_ME } from '../utils/queries';
@@ -7,9 +9,12 @@ import { REMOVE_BOOK } from '../utils/mutations';
 
 const savedBooks = () => {
 
-    const { loading, data } = useQuery(GET_ME);
-    const [removeBook, {err}] = useMutation(REMOVE_BOOK);
+    const { loading, data } = useQuery(GET_ME, {
+      fetchPolicy: 'cache-and-network',
+    });
 
+    const [removeBook] = useMutation(REMOVE_BOOK);
+    
     const userData = data?.me || data?.user || {};
 
     const handleDeleteBook = async (bookId) => {
@@ -31,7 +36,7 @@ const savedBooks = () => {
     };
 
   // if data isn't here yet, say so
-  if (!loading) {
+  if (loading) {
     return <h2>LOADING...</h2>;
   }
 
@@ -70,4 +75,4 @@ const savedBooks = () => {
   );
 };
 
-export default SavedBooks;
+export default savedBooks;

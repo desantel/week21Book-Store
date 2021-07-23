@@ -9,7 +9,7 @@ const resolvers = {
                 const userData = await User.findOne({_id: context.user._id}).populate('savedBooks');
                 return userData;
             } else {
-                throw new AuthenticationError('Plese login')
+                throw new AuthenticationError('Please login')
             }
         },
     },
@@ -29,7 +29,7 @@ const resolvers = {
                 throw new AuthenticationError('Please try again');
             }
             
-            const correctPW = await user.isCorrectPassword(password);
+            const correctPW = await User.isCorrectPassword(password);
 
             if (!correctPW) {
                 throw new AuthenticationError('Please try again');
