@@ -81,6 +81,9 @@ const LoginForm = () => {
           Submit
         </Button>
       </Form>
+      {error && (
+        <div>{error.message}</div>
+      )}
     </>
   );
 };

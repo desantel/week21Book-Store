@@ -7,11 +7,9 @@ import { removeBookId } from '../utils/localStorage';
 import { GET_ME } from '../utils/queries';
 import { REMOVE_BOOK } from '../utils/mutations';
 
-const savedBooks = () => {
+const SavedBooks = () => {
 
-    const { loading, data } = useQuery(GET_ME, {
-      fetchPolicy: 'cache-and-network',
-    });
+    const { loading, data } = useQuery(GET_ME);
 
     const [removeBook] = useMutation(REMOVE_BOOK);
     
@@ -25,7 +23,7 @@ const savedBooks = () => {
       }
 
       try {
-        const response = await removeBook({
+        await removeBook({
           variables: { bookId }
         });
 
@@ -75,4 +73,4 @@ const savedBooks = () => {
   );
 };
 
-export default savedBooks;
+export default SavedBooks;
